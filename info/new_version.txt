@@ -1,4 +1,4 @@
-## [v0.1.2](https://github.com/carlitooos1223/gitate/tree/v0.1.2) - 2025-05-13
+## [v0.1.3](https://github.com/carlitooos1223/gitate/tree/v0.1.3) - 2025-05-13
 
 ### Fix
-* fix: error fixed ecdb363
+* fix: remove base_url 824e104

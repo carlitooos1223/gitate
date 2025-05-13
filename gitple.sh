@@ -274,7 +274,7 @@ create_gitlab_tag() {
   githead=$(git rev-parse HEAD)
   data="{
     \"tag_name\": \"${version}\",
-    \"ref\": \"${githead}\",
+    \"ref\": \"refs/tags/${version}\",
     \"message\": \"Semantic release ${version}\",
     \"release_description\": \"${release_notes}\",
     \"draft\": false,
@@ -290,7 +290,7 @@ create_gitlab_tag() {
     --show-error \
     --output "$outfile" \
     --write-out $'%{http_code}' \
-    --header "PRIVATE-TOKEN: ${GITHUB_TOKEN}" \
+    --header "Authorization: token ${GITHUB_TOKEN}" \
     --header "Content-Type: application/json" \
     --data "$data" \
     "$url") || [[ "$status" -ge 300 ]]; then
