@@ -1,4 +1,4 @@
-## [v0.1.28](https://github.com/carlitooos1223/gitate/tree/v0.1.28) - 2025-05-13
+## [v0.1.29](https://github.com/carlitooos1223/gitate/tree/v0.1.29) - 2025-05-13
 
 ### Fix
-* fix: error caf74d8
+* fix: error 59ba932
