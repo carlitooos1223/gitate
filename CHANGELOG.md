@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.45](https://github.com/carlitooos1223/gitate/tree/v0.1.45) - 2025-05-13
+
+### Fix
+* fix: new error cc852a7
 ## [v0.1.44](https://github.com/carlitooos1223/gitate/tree/v0.1.44) - 2025-05-13
 
 ### Fix
