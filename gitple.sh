@@ -281,27 +281,30 @@ create_gitlab_tag() {
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
 
-  if ! status=$(curl \
-    -k \
-    --silent \
-    --verbose \
-    -X POST \
-    --output "$outfile" \
-    --write-out '%{http_code}' \
-    --header "Authorization: token ${GITHUB_TOKEN}" \
-    --header "Accept: application/vnd.github.v3+json" \
-    --header "Content-Type: application/json" \
-    --data "$data" \
-    "$url") || [[ "$status" -ge 300 ]]; then
-    echo "Error creating tag on GitHub:" >&2
-    echo "curl exit code: $?" >&2
-    echo "HTTP Status: $status" >&2
-    echo "HTTP Request:" >&2
-    echo "$data"
-    echo "HTTP Response:" >&2
-    cat "$outfile" >&2
-    echo
-    exit "$ERROR_GIT"
+  status=$(curl \
+      --silent \
+      --verbose \
+      -X POST \
+      --output "$outfile" \
+      --write-out "%{http_code}" \
+      -H "Authorization: token ${GITHUB_TOKEN}" \
+      -H "Accept: application/vnd.github.v3+json" \
+      -H "Content-Type: application/json" \
+      --data "$data" \
+      "$url")
+
+  echo "Código HTTP recibido: $status"
+
+  if [[ $? -ne 0 || "$status" -ge 300 ]]; then
+      echo "Error creando tag en GitHub:" >&2
+      echo "curl exit code: $?" >&2
+      echo "HTTP Status: $status" >&2
+      echo "HTTP Request:" >&2
+      echo "$data"
+      echo "HTTP Response:" >&2
+      cat "$outfile" >&2
+      echo
+      exit "$ERROR_GIT"
   fi
   echo "Tag created successfully on GitHub!"
 }
