@@ -292,7 +292,7 @@ create_gitlab_tag() {
       --data "$data" \
       "$url")
 
-  echo "$status"
+  echo "$status" > /dev/null 2>&1
 
   if [[ $? -ne 0 || "$status" -ge 300 ]]; then
       echo "Error creando tag en GitHub:" >&2
@@ -308,7 +308,6 @@ create_gitlab_tag() {
   fi
 
   git push origin $version > /dev/null 2>&1
-  echo "Tag created successfully on GitHub!"
 }
 
 
