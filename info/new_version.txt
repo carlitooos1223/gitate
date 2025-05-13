@@ -1,4 +1,4 @@
-## [v0.1.8](https://github.com/carlitooos1223/gitate/tree/v0.1.8) - 2025-05-13
+## [v0.1.9](https://github.com/carlitooos1223/gitate/tree/v0.1.9) - 2025-05-13
 
 ### Fix
-* fix: error 4896f75
+* fix: error f038010
