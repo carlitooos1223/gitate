@@ -280,7 +280,6 @@ create_gitlab_tag() {
     \"draft\": false,
     \"prerelease\": false
   }"
-  base_url=${$GITHUB_OWNER/$GITHUB_REPO}
   url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
 
   outfile=$(mktemp)
