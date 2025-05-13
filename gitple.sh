@@ -304,6 +304,7 @@ create_gitlab_tag() {
       echo "HTTP Response:" >&2
       cat "$outfile" >&2
       echo
+      echo "ENTRANDO EN IF"
       exit "$ERROR_GIT"
   fi
   echo "Tag created successfully on GitHub!"
