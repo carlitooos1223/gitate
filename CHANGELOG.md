@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.43](https://github.com/carlitooos1223/gitate/tree/v0.1.43) - 2025-05-13
+
+### Fix
+* fix: new error a1db376
 ## [v0.1.42](https://github.com/carlitooos1223/gitate/tree/v0.1.42) - 2025-05-13
 
 ### Fix

@@ -283,7 +283,6 @@ create_gitlab_tag() {
 
   status=$(curl \
       --silent \
-      --verbose \
       -X POST \
       --output "$outfile" \
       --write-out "%{http_code}" \
