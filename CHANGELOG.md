@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.23](https://github.com/carlitooos1223/gitate/tree/v0.1.23) - 2025-05-13
+
+### Fix
+* fix: error a6a2579
 ## [v0.1.22](https://github.com/carlitooos1223/gitate/tree/v0.1.22) - 2025-05-13
 
 ### Fix

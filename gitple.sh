@@ -281,7 +281,7 @@ create_gitlab_tag() {
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
   
-  status=$(curl --verbose \
+  status=$(curl \
         -X POST \
         --output "$outfile" \
         --write-out "%{http_code}" \
@@ -301,13 +301,11 @@ create_gitlab_tag() {
       cat "$outfile" >&2
       echo
       exit "$ERROR_GIT"
-      echo "HA ENTRADO AL IF"
   fi
 
   git push origin "${version}"
   echo "Tag created successfully on GitHub!"
 }
-
 
 create_git_tag() {
   local output
