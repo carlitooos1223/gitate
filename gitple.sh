@@ -272,30 +272,28 @@ build_release_notes() {
 create_gitlab_tag() {
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
-
-  jsonfile=$(mktemp)
-  cat > "$jsonfile" <<EOF
-{
-  "ref": "refs/tags/${version}",
-  "sha": "${githead}"
-}
-EOF
-
-  outfile=$(mktemp)
-  trap 'rm -f "$jsonfile" "$outfile"' EXIT
+  
+  # Definir el JSON como una cadena, sin variables externas
+  data="{\"ref\": \"refs/tags/${version}\", \"sha\": \"${githead}\"}"
 
   url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
+  
+  outfile=$(mktemp)
+  trap '{ rm -f "$outfile"; }' EXIT
 
+  # Hacer la solicitud POST usando --data
   status=$(curl \
+        -X POST \
         --output "$outfile" \
         --write-out "%{http_code}" \
         -H "Authorization: token ${GITHUB_TOKEN}" \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Content-Type: application/json" \
-        --data @"$jsonfile" \
+        --data "$data" \
         "$url")
 
-  if ! grep -q '"ref":' "$outfile" ; then
+  # Verificar si la respuesta contiene el ref esperado
+  if ! grep -q '"ref":' "$outfile"; then
       echo "Error creando tag en GitHub:" >&2
       echo "curl exit code: $?" >&2
       echo "HTTP Status: $status" >&2
@@ -308,8 +306,9 @@ EOF
   fi
 
   git push origin "${version}"
-  echo "Tag created successfully on GitHub!"
+  echo "Tag '${version}' creado correctamente en GitHub."
 }
+
 
 create_git_tag() {
   local output

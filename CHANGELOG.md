@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.32](https://github.com/carlitooos1223/gitate/tree/v0.1.32) - 2025-05-13
+
+### Fix
+* fix: new error 73a5280
 ## [v0.1.31](https://github.com/carlitooos1223/gitate/tree/v0.1.31) - 2025-05-13
 
 ### Fix
