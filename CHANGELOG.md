@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.50](https://github.com/carlitooos1223/gitate/tree/v0.1.50) - 2025-05-13
+
+### Fix
+* fix: new error 93d917a
 ## [v0.1.49](https://github.com/carlitooos1223/gitate/tree/v0.1.49) - 2025-05-13
 
 ### Fix

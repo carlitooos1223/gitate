@@ -1,4 +1,4 @@
-## [v0.1.49](https://github.com/carlitooos1223/gitate/tree/v0.1.49) - 2025-05-13
+## [v0.1.50](https://github.com/carlitooos1223/gitate/tree/v0.1.50) - 2025-05-13
 
 ### Fix
-* fix: new error 86dbadf
+* fix: new error 93d917a
