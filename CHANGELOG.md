@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.4](https://github.com/carlitooos1223/gitate/tree/v0.1.4) - 2025-05-13
+
+### Fix
+* fix: error 7f3f977
 ## [v0.1.3](https://github.com/carlitooos1223/gitate/tree/v0.1.3) - 2025-05-13
 
 ### Fix

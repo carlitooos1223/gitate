@@ -270,16 +270,13 @@ build_release_notes() {
 }
 
 create_gitlab_tag() {
-  local githead data base_url url outfile status
+  local githead data url outfile status
   githead=$(git rev-parse HEAD)
   data="{
-    \"tag_name\": \"${version}\",
     \"ref\": \"refs/tags/${version}\",
-    \"message\": \"Semantic release ${version}\",
-    \"release_description\": \"${release_notes}\",
-    \"draft\": false,
-    \"prerelease\": false
+    \"sha\": \"${githead}\"
   }"
+
   url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
 
   outfile=$(mktemp)
@@ -291,10 +288,11 @@ create_gitlab_tag() {
     --output "$outfile" \
     --write-out $'%{http_code}' \
     --header "Authorization: token ${GITHUB_TOKEN}" \
+    --header "Accept: application/vnd.github.v3+json" \
     --header "Content-Type: application/json" \
     --data "$data" \
     "$url") || [[ "$status" -ge 300 ]]; then
-    echo "Error creating tag on GITLAB:" >&2
+    echo "Error creating tag on GitHub:" >&2
     echo "curl exit code: $?" >&2
     echo "HTTP Status: $status" >&2
     echo "HTTP Request:" >&2
@@ -304,7 +302,7 @@ create_gitlab_tag() {
     echo
     exit "$ERROR_GIT"
   fi
-  echo "Tag created on GITLAB"
+  echo "Tag created successfully on GitHub!"
 }
 
 create_git_tag() {
