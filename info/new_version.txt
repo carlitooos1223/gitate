@@ -1,4 +1,4 @@
-## [v0.1.19](https://github.com/carlitooos1223/gitate/tree/v0.1.19) - 2025-05-13
+## [v0.1.20](https://github.com/carlitooos1223/gitate/tree/v0.1.20) - 2025-05-13
 
 ### Fix
-* fix: error e47531c
+* fix: error adbd027

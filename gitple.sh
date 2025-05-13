@@ -276,6 +276,7 @@ create_gitlab_tag() {
     \"ref\": \"refs/tags/${version}\",
     \"sha\": \"${githead}\"
   }"
+
   url="https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/git/refs"
 
   outfile=$(mktemp)
