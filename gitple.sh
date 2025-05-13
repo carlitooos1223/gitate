@@ -281,6 +281,16 @@ create_gitlab_tag() {
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
 
+  commit_check=$(curl -H "Authorization: token ${GITHUB_TOKEN}" \
+    "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}" \
+    --write-out "%{http_code}" --silent --output /dev/null)
+
+  # Si el commit no existe en GitHub (404), empujamos el commit
+  if [ "$commit_check" -eq 404 ]; then
+    echo "Commit no encontrado en GitHub. Empujando el commit..."
+    git push origin HEAD
+  fi
+
   # Hacer la solicitud POST usando --data
   status=$(curl \
         -X POST \

@@ -1,3 +1,7 @@
+## [v0.1.33](https://github.com/carlitooos1223/gitate/tree/v0.1.33) - 2025-05-13
+
+### Fix
+* fix: new error bbc0578
 ## [v0.1.32](https://github.com/carlitooos1223/gitate/tree/v0.1.32) - 2025-05-13
 
 ### Fix
