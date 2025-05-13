@@ -288,7 +288,7 @@ create_gitlab_tag() {
         -H "Authorization: token ${GITHUB_TOKEN}" \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Content-Type: application/json" \
-        --data "$data" \
+        --data $data \
         "$url")
   echo $data
   if ! grep -q '"ref":' "$outfile" ; then
