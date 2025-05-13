@@ -1,4 +1,4 @@
-## [v0.1.20](https://github.com/carlitooos1223/gitate/tree/v0.1.20) - 2025-05-13
+## [v0.1.21](https://github.com/carlitooos1223/gitate/tree/v0.1.21) - 2025-05-13
 
 ### Fix
-* fix: error adbd027
+* fix: error 307a48a
