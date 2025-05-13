@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.30](https://github.com/carlitooos1223/gitate/tree/v0.1.30) - 2025-05-13
+
+### Fix
+* fix: error c5f9940
 ## [v0.1.29](https://github.com/carlitooos1223/gitate/tree/v0.1.29) - 2025-05-13
 
 ### Fix

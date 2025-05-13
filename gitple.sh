@@ -290,7 +290,7 @@ create_gitlab_tag() {
         -H "Content-Type: application/json" \
         --data "$data" \
         $url)
-  echo $data
+
   if ! grep -q '"ref":' "$outfile" ; then
       echo "Error creando tag en GitHub:" >&2
       echo "curl exit code: $?" >&2
