@@ -281,15 +281,16 @@ create_gitlab_tag() {
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
 
-  status=$(curl --verbose -X POST \
-    -H "Authorization: token ${GITHUB_TOKEN}" \
-    -H "Accept: application/vnd.github.v3+json" \
-    -H "Content-Type: application/json" \
-    --data '{
-      "ref": "refs/tags/v0.1.18",
-      "sha": "fefd4e79a267c252834110c719e8f2b15b3ca329"
-    }' \
-    "$url")
+  status=$(curl --verbose \
+        -X POST \
+        --output "$outfile" \
+        --write-out "%{http_code}" \
+        -H "Authorization: token ${GITHUB_TOKEN}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        -H "Content-Type: application/json" \
+        --data "$data" \
+        "$url")
+
 
   if [[ ! -s "$outfile" || "$status" -ge 300 ]]; then
       echo "Error creando tag en GitHub:" >&2

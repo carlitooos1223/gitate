@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.19](https://github.com/carlitooos1223/gitate/tree/v0.1.19) - 2025-05-13
+
+### Fix
+* fix: error e47531c
 ## [v0.1.18](https://github.com/carlitooos1223/gitate/tree/v0.1.18) - 2025-05-13
 
 ### Fix
