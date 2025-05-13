@@ -292,7 +292,6 @@ create_gitlab_tag() {
     echo "Intentando obtener detalles sobre el error..."
     curl -H "Authorization: token ${GITHUB_TOKEN}" \
          "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}"
-    exit 1
   fi
 
   echo $commit_check

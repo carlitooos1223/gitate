@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.37](https://github.com/carlitooos1223/gitate/tree/v0.1.37) - 2025-05-13
+
+### Fix
+* fix: new error f817f96
 ## [v0.1.36](https://github.com/carlitooos1223/gitate/tree/v0.1.36) - 2025-05-13
 
 ### Fix
