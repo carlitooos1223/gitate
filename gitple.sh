@@ -292,7 +292,7 @@ create_github_tag() {
         --data "$data" \
         "$url")
 
-  if ! grep -q '"ref":' "$outfile"; then
+  if ! grep -q '"ref":' "$outfile" ; then
       echo "Error creando tag en GitHub:" >&2
       echo "curl exit code: $?" >&2
       echo "HTTP Status: $status" >&2
