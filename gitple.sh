@@ -293,12 +293,8 @@ create_gitlab_tag() {
     curl -H "Authorization: token ${GITHUB_TOKEN}" \
          "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}"
   fi
+  git push origin HEAD
 
-  echo $commit_check
-  if [ "$commit_check" -eq 422 ]; then
-    echo "Commit no encontrado en GitHub. Empujando el commit..."
-    git push origin HEAD
-  fi
 
   # Hacer la solicitud POST usando --data
   status=$(curl \
