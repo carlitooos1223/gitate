@@ -1,4 +1,4 @@
-## [v0.1.23](https://github.com/carlitooos1223/gitate/tree/v0.1.23) - 2025-05-13
+## [v0.1.24](https://github.com/carlitooos1223/gitate/tree/v0.1.24) - 2025-05-13
 
 ### Fix
-* fix: error a6a2579
+* fix: error 3e77317

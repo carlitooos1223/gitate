@@ -273,7 +273,11 @@ create_gitlab_tag() {
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
   
-  # Definir el JSON en una sola línea
+  echo "GITHUB_OWNER=$GITHUB_OWNER"
+  echo "GITHUB_REPO=$GITHUB_REPO"
+  echo "GITHUB_TOKEN=$GITHUB_TOKEN"
+  echo "version=$version"
+
   data="{\"ref\": \"refs/tags/${version}\", \"sha\": \"${githead}\"}"
   
   url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
