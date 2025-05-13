@@ -1,4 +1,4 @@
-## [v0.1.15](https://github.com/carlitooos1223/gitate/tree/v0.1.15) - 2025-05-13
+## [v0.1.16](https://github.com/carlitooos1223/gitate/tree/v0.1.16) - 2025-05-13
 
 ### Fix
-* fix: error da1d99f
+* fix: error f27e4e5
