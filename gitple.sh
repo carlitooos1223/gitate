@@ -270,7 +270,6 @@ build_release_notes() {
 }
 
 create_gitlab_tag() {
-create_github_tag() {
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
   
