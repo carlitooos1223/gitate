@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.36](https://github.com/carlitooos1223/gitate/tree/v0.1.36) - 2025-05-13
+
+### Fix
+* fix: new error a78d4b8
 ## [v0.1.35](https://github.com/carlitooos1223/gitate/tree/v0.1.35) - 2025-05-13
 
 ### Fix

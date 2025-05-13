@@ -296,7 +296,7 @@ create_gitlab_tag() {
   fi
 
   echo $commit_check
-  if [ "$commit_check" -eq 404 ]; then
+  if [ "$commit_check" -eq 422 ]; then
     echo "Commit no encontrado en GitHub. Empujando el commit..."
     git push origin HEAD
   fi
