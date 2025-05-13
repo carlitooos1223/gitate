@@ -273,23 +273,27 @@ create_gitlab_tag() {
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
 
-  data="{\"ref\": \"refs/tags/${version}\", \"sha\": \"${githead}\"}"
-  
-  url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
-  
+  jsonfile=$(mktemp)
+  cat > "$jsonfile" <<EOF
+{
+  "ref": "refs/tags/${version}",
+  "sha": "${githead}"
+}
+EOF
+
   outfile=$(mktemp)
-  trap '{ rm -f "$outfile"; }' EXIT
-  
+  trap 'rm -f "$jsonfile" "$outfile"' EXIT
+
+  url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
+
   status=$(curl \
-        --verbose \
-        -X POST \
         --output "$outfile" \
         --write-out "%{http_code}" \
         -H "Authorization: token ${GITHUB_TOKEN}" \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Content-Type: application/json" \
-        --data "$data" \
-        $url)
+        --data @"$jsonfile" \
+        "$url")
 
   if ! grep -q '"ref":' "$outfile" ; then
       echo "Error creando tag en GitHub:" >&2

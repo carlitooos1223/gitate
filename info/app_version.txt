@@ -1,3 +1,7 @@
+## [v0.1.31](https://github.com/carlitooos1223/gitate/tree/v0.1.31) - 2025-05-13
+
+### Fix
+* fix: new error e45d19c
 ## [v0.1.30](https://github.com/carlitooos1223/gitate/tree/v0.1.30) - 2025-05-13
 
 ### Fix
