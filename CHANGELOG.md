@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.35](https://github.com/carlitooos1223/gitate/tree/v0.1.35) - 2025-05-13
+
+### Fix
+* fix: new error d81e12c
 ## [v0.1.34](https://github.com/carlitooos1223/gitate/tree/v0.1.34) - 2025-05-13
 
 ### Fix

@@ -282,8 +282,18 @@ create_gitlab_tag() {
   trap '{ rm -f "$outfile"; }' EXIT
 
   commit_check=$(curl -H "Authorization: token ${GITHUB_TOKEN}" \
+    -H "Accept: application/vnd.github.v3+json" \
     "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}" \
     --write-out "%{http_code}" --silent --output /dev/null)
+
+  # Mostrar información para depuración si commit_check es "000"
+  if [ "$commit_check" == "000" ]; then
+    echo "Error en la solicitud de verificación del commit, código de respuesta: 000"
+    echo "Intentando obtener detalles sobre el error..."
+    curl -H "Authorization: token ${GITHUB_TOKEN}" \
+         "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}"
+    exit 1
+  fi
 
   echo $commit_check
   if [ "$commit_check" -eq 404 ]; then
