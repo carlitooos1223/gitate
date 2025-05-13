@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.25](https://github.com/carlitooos1223/gitate/tree/v0.1.25) - 2025-05-13
+
+### Fix
+* fix: error b071289
 ## [v0.1.24](https://github.com/carlitooos1223/gitate/tree/v0.1.24) - 2025-05-13
 
 ### Fix

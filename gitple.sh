@@ -272,11 +272,6 @@ build_release_notes() {
 create_gitlab_tag() {
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
-  
-  echo "GITHUB_OWNER=$GITHUB_OWNER"
-  echo "GITHUB_REPO=$GITHUB_REPO"
-  echo "GITHUB_TOKEN=$GITHUB_TOKEN"
-  echo "version=$version"
 
   data="{\"ref\": \"refs/tags/${version}\", \"sha\": \"${githead}\"}"
   
@@ -286,6 +281,7 @@ create_gitlab_tag() {
   trap '{ rm -f "$outfile"; }' EXIT
   
   status=$(curl \
+        --verbose \
         -X POST \
         --output "$outfile" \
         --write-out "%{http_code}" \
