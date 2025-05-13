@@ -285,8 +285,9 @@ create_gitlab_tag() {
     --ssl-no-revoke \
     --silent \
     --verbose \
+    -X POST \
     --output "$outfile" \
-    --write-out $'%{http_code}' \
+    --write-out '%{http_code}' \
     --header "Authorization: token ${GITHUB_TOKEN}" \
     --header "Accept: application/vnd.github.v3+json" \
     --header "Content-Type: application/json" \
