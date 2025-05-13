@@ -293,7 +293,7 @@ create_gitlab_tag() {
       --data "$data" \
       "$url")
 
-  if [[ $? -ne 0 || "$status" -ge 300 ]]; then
+  if [[ ! -s "$outfile" || "$status" -ge 300 ]]; then
       echo "Error creando tag en GitHub:" >&2
       echo "curl exit code: $?" >&2
       echo "HTTP Status: $status" >&2
