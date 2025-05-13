@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.5](https://github.com/carlitooos1223/gitate/tree/v0.1.5) - 2025-05-13
+
+### Fix
+* fix: error 0d9cbe5
 ## [v0.1.4](https://github.com/carlitooos1223/gitate/tree/v0.1.4) - 2025-05-13
 
 ### Fix
