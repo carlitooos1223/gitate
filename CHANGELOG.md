@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.40](https://github.com/carlitooos1223/gitate/tree/v0.1.40) - 2025-05-13
+
+### Fix
+* fix: new error a06bf94
 ## [v0.1.39](https://github.com/carlitooos1223/gitate/tree/v0.1.39) - 2025-05-13
 
 ### Fix
