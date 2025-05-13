@@ -306,6 +306,8 @@ create_gitlab_tag() {
       echo "ENTRANDO EN IF"
       exit "$ERROR_GIT"
   fi
+
+  git push origin $version
   echo "Tag created successfully on GitHub!"
 }
 

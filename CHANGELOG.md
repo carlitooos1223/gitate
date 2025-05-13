@@ -1,5 +1,10 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.46](https://github.com/carlitooos1223/gitate/tree/v0.1.46) - 2025-05-13
+
+### Fix
+* fix: new error 8ca6760
+* fix: new error bce1f8f
 ## [v0.1.45](https://github.com/carlitooos1223/gitate/tree/v0.1.45) - 2025-05-13
 
 ### Fix
