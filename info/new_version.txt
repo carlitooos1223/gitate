@@ -1,4 +1,4 @@
-## [v0.1.43](https://github.com/carlitooos1223/gitate/tree/v0.1.43) - 2025-05-13
+## [v0.1.44](https://github.com/carlitooos1223/gitate/tree/v0.1.44) - 2025-05-13
 
 ### Fix
-* fix: new error a1db376
+* fix: new error f51a501
