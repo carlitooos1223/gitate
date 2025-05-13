@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.34](https://github.com/carlitooos1223/gitate/tree/v0.1.34) - 2025-05-13
+
+### Fix
+* fix: new error ea5edfa
 ## [v0.1.33](https://github.com/carlitooos1223/gitate/tree/v0.1.33) - 2025-05-13
 
 ### Fix

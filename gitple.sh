@@ -285,7 +285,7 @@ create_gitlab_tag() {
     "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}" \
     --write-out "%{http_code}" --silent --output /dev/null)
 
-  # Si el commit no existe en GitHub (404), empujamos el commit
+  echo $commit_check
   if [ "$commit_check" -eq 404 ]; then
     echo "Commit no encontrado en GitHub. Empujando el commit..."
     git push origin HEAD
