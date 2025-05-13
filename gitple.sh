@@ -281,7 +281,7 @@ create_gitlab_tag() {
 
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
-
+  echo $data
   if ! status=$(curl \
     --silent \
     --verbose \
