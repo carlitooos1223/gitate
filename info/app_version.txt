@@ -1,3 +1,7 @@
+## [v0.1.6](https://github.com/carlitooos1223/gitate/tree/v0.1.6) - 2025-05-13
+
+### Fix
+* fix: error f8f591c
 ## [v0.1.5](https://github.com/carlitooos1223/gitate/tree/v0.1.5) - 2025-05-13
 
 ### Fix

@@ -270,7 +270,6 @@ build_release_notes() {
 }
 
 create_gitlab_tag() {
-  echo $GITHUB_TOKEN
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
   data="{
@@ -285,7 +284,7 @@ create_gitlab_tag() {
 
   if ! status=$(curl \
     --silent \
-    --show-error \
+    --verbose \
     --output "$outfile" \
     --write-out $'%{http_code}' \
     --header "Authorization: token ${GITHUB_TOKEN}" \
