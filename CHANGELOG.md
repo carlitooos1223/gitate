@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.48](https://github.com/carlitooos1223/gitate/tree/v0.1.48) - 2025-05-13
+
+### Fix
+* fix: new error cfdffbd
 ## [v0.1.47](https://github.com/carlitooos1223/gitate/tree/v0.1.47) - 2025-05-13
 
 ### Fix

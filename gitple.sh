@@ -307,7 +307,7 @@ create_gitlab_tag() {
       exit "$ERROR_GIT"
   fi
 
-  @git push origin $version
+  git push origin $version > /dev/null 2>&1
   echo "Tag created successfully on GitHub!"
 }
 
