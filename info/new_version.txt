@@ -1,4 +1,4 @@
-## [v0.1.13](https://github.com/carlitooos1223/gitate/tree/v0.1.13) - 2025-05-13
+## [v0.1.14](https://github.com/carlitooos1223/gitate/tree/v0.1.14) - 2025-05-13
 
 ### Fix
-* fix: error a454b8a
+* fix: error 7cacaf6

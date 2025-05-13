@@ -324,7 +324,6 @@ create_git_tag() {
 create_tag() {
   if [[ -n $GITHUB_TOKEN ]]; then
     create_gitlab_tag
-    create_gitlab_release
   else
     echo "Environment variable GITHUB_TOKEN not provided." >&2
     create_git_tag

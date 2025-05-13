@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.14](https://github.com/carlitooos1223/gitate/tree/v0.1.14) - 2025-05-13
+
+### Fix
+* fix: error 7cacaf6
 ## [v0.1.13](https://github.com/carlitooos1223/gitate/tree/v0.1.13) - 2025-05-13
 
 ### Fix
