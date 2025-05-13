@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.28](https://github.com/carlitooos1223/gitate/tree/v0.1.28) - 2025-05-13
+
+### Fix
+* fix: error caf74d8
 ## [v0.1.27](https://github.com/carlitooos1223/gitate/tree/v0.1.27) - 2025-05-13
 
 ### Fix

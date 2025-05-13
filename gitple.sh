@@ -289,7 +289,7 @@ create_gitlab_tag() {
         -H "Accept: application/vnd.github.v3+json" \
         -H "Content-Type: application/json" \
         --data $data \
-        "$url")
+        $url)
   echo $data
   if ! grep -q '"ref":' "$outfile" ; then
       echo "Error creando tag en GitHub:" >&2
