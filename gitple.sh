@@ -282,7 +282,7 @@ create_gitlab_tag() {
   trap '{ rm -f "$outfile"; }' EXIT
 
   if ! status=$(curl \
-    --ssl-no-revoke \
+    -k \
     --silent \
     --verbose \
     -X POST \

@@ -1,4 +1,4 @@
-## [v0.1.11](https://github.com/carlitooos1223/gitate/tree/v0.1.11) - 2025-05-13
+## [v0.1.12](https://github.com/carlitooos1223/gitate/tree/v0.1.12) - 2025-05-13
 
 ### Fix
-* fix: error 62ade71
+* fix: error fab7bd5
