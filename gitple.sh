@@ -272,43 +272,30 @@ build_release_notes() {
 create_gitlab_tag() {
   local githead data url outfile status
   githead=$(git rev-parse HEAD)
-  
-  # Definir el JSON como una cadena, sin variables externas
-  data="{\"ref\": \"refs/tags/${version}\", \"sha\": \"${githead}\"}"
+  data="{
+    \"ref\": \"refs/tags/${version}\",
+    \"sha\": \"${githead}\"
+  }"
+  url="https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/git/refs"
 
-  url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
-  
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
 
-  commit_check=$(curl -H "Authorization: token ${GITHUB_TOKEN}" \
-    -H "Accept: application/vnd.github.v3+json" \
-    "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}" \
-    --write-out "%{http_code}" --silent --output /dev/null)
-
-  # Mostrar información para depuración si commit_check es "000"
-  if [ "$commit_check" == "000" ]; then
-    echo "Error en la solicitud de verificación del commit, código de respuesta: 000"
-    echo "Intentando obtener detalles sobre el error..."
-    curl -H "Authorization: token ${GITHUB_TOKEN}" \
-         "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/commits/${githead}"
-  fi
-  git push origin HEAD
-
-
-  # Hacer la solicitud POST usando --data
   status=$(curl \
-        -X POST \
-        --output "$outfile" \
-        --write-out "%{http_code}" \
-        -H "Authorization: token ${GITHUB_TOKEN}" \
-        -H "Accept: application/vnd.github.v3+json" \
-        -H "Content-Type: application/json" \
-        --data "$data" \
-        "$url")
+      --silent \
+      --verbose \
+      -X POST \
+      --output "$outfile" \
+      --write-out "%{http_code}" \
+      -H "Authorization: token ${GITHUB_TOKEN}" \
+      -H "Accept: application/vnd.github.v3+json" \
+      -H "Content-Type: application/json" \
+      --data "$data" \
+      "$url")
 
-  # Verificar si la respuesta contiene el ref esperado
-  if ! grep -q '"ref":' "$outfile"; then
+  echo "Código HTTP recibido: $status"
+
+  if [[ $? -ne 0 || "$status" -ge 300 ]]; then
       echo "Error creando tag en GitHub:" >&2
       echo "curl exit code: $?" >&2
       echo "HTTP Status: $status" >&2
@@ -319,9 +306,7 @@ create_gitlab_tag() {
       echo
       exit "$ERROR_GIT"
   fi
-
-  git push origin "${version}"
-  echo "Tag '${version}' creado correctamente en GitHub."
+  echo "Tag created successfully on GitHub!"
 }
 
 

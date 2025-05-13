@@ -1,4 +1,4 @@
-## [v0.1.38](https://github.com/carlitooos1223/gitate/tree/v0.1.38) - 2025-05-13
+## [v0.1.39](https://github.com/carlitooos1223/gitate/tree/v0.1.39) - 2025-05-13
 
 ### Fix
-* fix: new error e505af2
+* fix: new error e00d0d3

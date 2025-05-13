@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.39](https://github.com/carlitooos1223/gitate/tree/v0.1.39) - 2025-05-13
+
+### Fix
+* fix: new error e00d0d3
 ## [v0.1.38](https://github.com/carlitooos1223/gitate/tree/v0.1.38) - 2025-05-13
 
 ### Fix
