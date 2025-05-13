@@ -276,12 +276,13 @@ create_gitlab_tag() {
     \"ref\": \"refs/tags/${version}\",
     \"sha\": \"${githead}\"
   }"
-
-  url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/refs"
+  echo "OWNER: $GITHUB_OWNER"
+  echo "REPO: $GITHUB_REPO"
+  url="https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/git/refs"
 
   outfile=$(mktemp)
   trap '{ rm -f "$outfile"; }' EXIT
-  echo $data
+  echo ESTA ES LA DATA: "$data"
   if ! status=$(curl \
     --silent \
     --verbose \

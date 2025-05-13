@@ -1,5 +1,9 @@
 # CHANGELOG 
 All notable changes to this project will be documented in this file.
+## [v0.1.8](https://github.com/carlitooos1223/gitate/tree/v0.1.8) - 2025-05-13
+
+### Fix
+* fix: error 4896f75
 ## [v0.1.7](https://github.com/carlitooos1223/gitate/tree/v0.1.7) - 2025-05-13
 
 ### Fix
