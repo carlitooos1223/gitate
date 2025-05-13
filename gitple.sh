@@ -301,6 +301,7 @@ create_gitlab_tag() {
       cat "$outfile" >&2
       echo
       exit "$ERROR_GIT"
+      echo "HA ENTRADO AL IF"
   fi
 
   git push origin "${version}"
