@@ -16,6 +16,7 @@ Usage:
 Available Commands:
   start           Empezar un nuevo proyecto.
   template        Crea una plantilla para un nuevo proyecto.
+  create-template Puedes crear un plantilla de un proyecto ya existente.
   new-version     Sube de versión tu aplicación de forma automática dependiendo de tus commits.
   status          Muestra el estado de tu aplicación.
   save            Guarda tu proyecto.
