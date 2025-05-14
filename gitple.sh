@@ -7,10 +7,13 @@ Usage:
 Available Commands:
   start           Empezar un nuevo proyecto.
   template        Crea una plantilla para un nuevo proyecto.
+  new-version     Sube de versión tu aplicación de forma automática dependiendo de tus commits.
+  status          Muestra el estado de tu aplicación.
+  guardar         Guarda tu proyecto.
   show-tags       Lista todas tus tags.
   delete-tag      Elimina una tag.
+  show-branch     Lista todas tus branch.
   delete-branch   Elimina una branch.
-  new-version     Sube de versión tu aplicación de forma automática dependiendo de tus commits.
   version         Te dice la última versión de tu aplicación.
 
 Flags:
@@ -55,15 +58,48 @@ options() {
   fi
    while :; do
 		case $1 in
+      start)
+        if [ ! -d .git ]; then
+          echo "No te encuentras en un repositorio git"
+          exit
+        fi
+        echo "Iniciando un nuevo proyecto..."
+        echo "Introduce datos sobre tu proyecto:"
+        read -p "Nombre del proyecto: " project_name
+        GITHUB_REPO="$project_name"
+        read -p "Dueño/a del proyecto: " project_owner
+        GITHUB_OWNER="$project_owner"
+        exit
+        ;;
+      show-tags)
+        echo "Mostrando tags..."
+        show-tags
+        ;;
       delete-tag)
         if [[ "$2" == "-h" ]] || [[ "$2" == "--help" ]] || [[ "$2" == "" ]]; then
-          echo "Usage: gitple delete tag [nombre_del_tag]"
-          echo "Descripción elimina el tag especificado"
+          echo "Usage: gitple delete-tag [nombre_del_tag]"
+          echo "Descripción: elimina el tag especificado"
           exit
         elif [ -n "$2" ]; then
           check-tag "$2"
           echo "Eliminando el tag: $2"
           delete-tag "$2"
+        fi
+        ;;
+      show-branch)
+        echo "Mostrando branches..."
+        git branch
+        exit
+        ;;
+      delete-branch)
+        if [[ "$2" == "-h" ]] || [[ "$2" == "--help" ]] || [[ "$2" == "" ]]; then
+          echo "Usage: gitple delete-branch [nombre_del_branch]"
+          echo "Descripción: elimina el branch especificado"
+          exit
+        elif [ -n "$2" ]; then
+          check-branch "$2"
+          echo "Eliminando el branch: $2"
+          delete-branch "$2"
         fi
         ;;
       new-version)
@@ -92,6 +128,11 @@ options() {
   done
 }
 
+show-tags() {
+    git tag --sort=-v:refname
+    exit
+}
+
 check-tag() {
   tag=$1
 
@@ -112,6 +153,28 @@ delete-tag() {
   git push origin --delete $tag > /dev/null 2>&1
   exit
 }
+
+check-branch() {
+    branch=$1
+    
+    local_branch=$(git branch | grep "$branch" | wc -l)
+    remote_branch=$(git ls-remote --heads origin | grep "$branch" | wc -l)
+    if [ $local_branch -eq 0 ] && [ $remote_branch -eq 0 ]; then
+        echo "El branch proporcionado no existe: $branch"
+        echo
+        echo Para listar tus branches utilice: gitple show-branch
+        exit
+    fi
+}
+
+delete-branch() {
+    branch=$1
+    
+    git branch -d $branch
+    git push origin --delete $branch > /dev/null 2>&1
+    exit
+}
+
 
 version() {
   cat info/last_version.txt
