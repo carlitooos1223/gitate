@@ -26,7 +26,9 @@ Available Commands:
   version         Te dice la última versión de tu aplicación.
 
 Flags:
-  -h, --help      Enseña ayuda sobre el comando."
+  -h, --help      Enseña ayuda sobre el comando.
+  
+Usa "gitple <command> -h|--help para obtener más información sobre el comando."
 
 readonly SEMANTIC_RELEASE_VERSION="0.1.0"
 
