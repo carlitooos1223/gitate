@@ -9,7 +9,7 @@ Available Commands:
   template        Crea una plantilla para un nuevo proyecto.
   new-version     Sube de versión tu aplicación de forma automática dependiendo de tus commits.
   status          Muestra el estado de tu aplicación.
-  guardar         Guarda tu proyecto.
+  save            Guarda tu proyecto.
   show-tags       Lista todas tus tags.
   delete-tag      Elimina una tag.
   show-branch     Lista todas tus branch.
