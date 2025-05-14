@@ -1,6 +1,15 @@
 #! /bin/bash
 
-readonly USAGE="Automated version management and release publishing (in bash).
+readonly USAGE=Programa de control para tu repositorio Git.
+
+Environment variables:
+
+| Name            | Description                                                               |
+|-----------------|---------------------------------------------------------------------------|
+| $GITUB_REPO     | Establece el nombre del repositorio de tu proyecto de Git.		      |
+| $GITHUB_OWNER   | Establece el nombre del propietario de tu GitHub.                         |
+| $GITHUB_TOKEN   | Establece el token de tu GitHub.                                          |
+
 Usage:
   gitple [command]
 
