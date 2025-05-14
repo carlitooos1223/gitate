@@ -5,14 +5,16 @@ Usage:
   gitple [command]
 
 Available Commands:
-  create          Crea una plantilla para un nuevo proyecto.
+  start           Empezar un nuevo proyecto.
+  template        Crea una plantilla para un nuevo proyecto.
+  show-tags       Lista todas tus tags.
   delete-tag      Elimina una tag.
   delete-branch   Elimina una branch.
   new-version     Sube de versión tu aplicación de forma automática dependiendo de tus commits.
   version         Te dice la última versión de tu aplicación.
 
 Flags:
-  -h, --help      Show this help."
+  -h, --help      Enseña ayuda sobre el comando."
 
 readonly SEMANTIC_RELEASE_VERSION="0.1.0"
 
@@ -47,38 +49,72 @@ GITHUB_REPO="gitate"
 shopt -s extglob
 
 options() {
-        if [ $# -eq 0 ]; then
-                echo "$USAGE"
-                exit
-        fi
-
-        while :; do
+  if [ $# -eq 0 ]; then
+    echo "$USAGE"
+    exit
+  fi
+   while :; do
 		case $1 in
-                        new-version)
-                                semantic_release "${BASH_ARGV[@]}"
-                                exit
-                                ;;
-                        version)
-                                echo "Semantic-release: v${SEMANTIC_RELEASE_VERSION}"
-                                exit
-                                ;;
-                        -h|-\?|--help)
-                                echo "$USAGE"
-                                exit
-                                ;;
-                        -?*)
-                                echo "Comando desconocido: $1" >&2
-                                echo "$USAGE"
-                                exit "$ERROR_ARGUMENTS"
-                                ;;
-                        ?*)
-                                echo "Comando desconocido: $1" >&2
-                                echo "$USAGE"
-                                exit "$ERROR_ARGUMENTS"
-                                ;;
-                esac
-                shift
-        done
+      delete-tag)
+        if [[ "$2" == "-h" ]] || [[ "$2" == "--help" ]] || [[ "$2" == "" ]]; then
+          echo "Usage: gitple delete tag [nombre_del_tag]"
+          echo "Descripción elimina el tag especificado"
+          exit
+        elif [ -n "$2" ]; then
+          check-tag "$2"
+          echo "Eliminando el tag: $2"
+          delete-tag "$2"
+        fi
+        ;;
+      new-version)
+        semantic_release "${BASH_ARGV[@]}"
+        exit
+        ;;
+      version)
+        version
+        exit
+        ;;
+      -h|-\?|--help)
+        echo "$USAGE"
+        exit
+        ;;
+      -?*)
+        echo "Comando desconocido: $1" >&2
+        echo "$USAGE"
+        exit "$ERROR_ARGUMENTS"
+        ;;
+      ?*)
+        echo "Comando desconocido: $1" >&2
+        echo "$USAGE"
+        exit "$ERROR_ARGUMENTS"
+        ;;
+      esac
+  done
+}
+
+check-tag() {
+  tag=$1
+
+  local_tag=$(git tag | grep "$tag" | wc -l)
+  remote_tag=$(git ls-remote --tags origin | grep "$tag" | wc -l)
+  if [ $local_tag -eq 0 ] && [ $remote_tag -eq 0 ]; then
+    echo "El tag proporcionado no existe: $tag"
+    echo
+    echo Para listar tus tags utilice: gitple show-tags
+    exit
+  fi
+}
+
+delete-tag() {
+  tag=$1
+
+  git tag -d $tag
+  git push origin --delete $tag > /dev/null 2>&1
+  exit
+}
+
+version() {
+  cat info/last_version.txt
 }
 
 check_dependencies() {
@@ -309,7 +345,6 @@ create_gitlab_tag() {
 
   git push origin $version > /dev/null 2>&1
 }
-
 
 create_git_tag() {
   local output
