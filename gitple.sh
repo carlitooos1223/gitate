@@ -175,7 +175,6 @@ delete-branch() {
     exit
 }
 
-
 version() {
   cat info/last_version.txt
 }
