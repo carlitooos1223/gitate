@@ -14,17 +14,12 @@ Usage:
   gitple [command]
 
 Available Commands:
-  create-template Puedes crear un plantilla de un proyecto ya existente.
-  delete-branch   Elimina una branch.
-  delete-tag      Elimina una tag.
-  new-version     Sube de versión tu aplicación de forma automática dependiendo de tus commits.
-  save            Guarda tu proyecto.
-  show-branch     Lista todas tus branch.
-  show-tags       Lista todas tus tags.
-  start           Empezar un nuevo proyecto.
-  status          Muestra el estado de tu aplicación.
-  template        Crea una plantilla para un nuevo proyecto.
-  version         Te dice la última versión de tu aplicación.
+  branch [show|create|delete]       Lista todas tus branch.
+  review                            Muestra el estado de tu aplicación.
+  start                             Empezar un nuevo proyecto.
+  tag [show|create|delete]          Lista todas tus tags.
+  template [create]                 Crea una plantilla para un nuevo proyecto.
+  version [show|new]                Te dice la última versión de tu aplicación.
 
 Flags:
   -h, --help      Enseña ayuda sobre el comando.
