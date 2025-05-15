@@ -188,7 +188,12 @@ delete-branch() {
 }
 
 version() {
-  cat info/last_version.txt
+  if [ ! -f info/last_version.txt ]; then
+    echo "Actualmente tu aplicación no tiene ninguna versión disponible"
+    echo "Para crear una nueva versión ejecute: gitple new-version"
+  else
+    cat info/last_version.txt
+  fi
 }
 
 check_dependencies() {
