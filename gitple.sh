@@ -1,30 +1,41 @@
 #! /bin/bash
 
-readonly USAGE=Programa de control para tu repositorio Git.
+# COLORS
+BLUE="\e[34m"
+GREEN="\e[32m"
+RED="\e[31m"
+RESET="\e[0m"
+
+if [ ! -d .git ]; then
+  echo -e "${RED}No te encuentras en un repositorio git${RESET}"
+  exit
+fi
+
+readonly USAGE="Programa de control para tu repositorio Git.
 
 Environment variables:
 
 | Name            | Description                                                               |
 |-----------------|---------------------------------------------------------------------------|
-| $GITUB_REPO     | Establece el nombre del repositorio de tu proyecto de Git.		      |
-| $GITHUB_OWNER   | Establece el nombre del propietario de tu GitHub.                         |
-| $GITHUB_TOKEN   | Establece el token de tu GitHub.                                          |
+| GITUB_REPO      | Establece el nombre del repositorio de tu proyecto de Git.		      |
+| GITHUB_OWNER    | Establece el nombre del propietario de tu GitHub.                         |
+| GITHUB_TOKEN    | Establece el token de tu GitHub.                                          |
 
 Usage:
-  gitple [command]
+  ${BLUE}gitple [command]${RESET}
 
 Available Commands:
-  branch [show|create|delete]       Lista todas tus branch.
-  review                            Muestra el estado de tu aplicación.
-  start                             Empezar un nuevo proyecto.
-  tag [show|create|delete]          Lista todas tus tags.
-  template [create]                 Crea una plantilla para un nuevo proyecto.
-  version [show|new]                Te dice la última versión de tu aplicación.
+  ${GREEN}branch [show|create|delete]${RESET}       Lista tus branches | Crea una branch | Elimina una branch
+  ${GREEN}review${RESET}                            Muestra el estado de tu aplicación
+  ${GREEN}start${RESET}                             Empezar un nuevo proyecto
+  ${GREEN}tag [show|create|delete]${RESET}          Lista tus tags | Crea una tag | Elimina una tag
+  ${GREEN}template [create]${RESET}                 Crea una plantilla para un nuevo proyecto
+  ${GREEN}version [show|new]${RESET}                Te dice la última versión de tu aplicación | Crea una nueva versión y modifica el CHANGELOG automáticamente
 
 Flags:
-  -h, --help      Enseña ayuda sobre el comando.
+  ${GREEN}-h, --help${RESET}                        Enseña ayuda sobre el comando.
   
-Usa "gitple <command> -h|--help para obtener más información sobre el comando."
+${BLUE}Usa 'gitple <command> -h|--help' para obtener más información sobre el comando.${RESET}"
 
 readonly SEMANTIC_RELEASE_VERSION="0.1.0"
 
@@ -52,87 +63,232 @@ version=""
 last_release_tag="" 
 release_notes=""
 
-# Variables de entorno para conexión con github
-GITHUB_OWNER="carlitooos1223"
-GITHUB_REPO="gitate"
-
 shopt -s extglob
 
 options() {
   if [ $# -eq 0 ]; then
-    echo "$USAGE"
+    echo -e "$USAGE"
     exit
   fi
    while :; do
 		case $1 in
       start)
-        if [ ! -d .git ]; then
-          echo "No te encuentras en un repositorio git"
-          exit
-        fi
-        echo "Iniciando un nuevo proyecto..."
+        echo -e "${GREEN}Iniciando un nuevo proyecto...${RESET}\n"
         echo "Introduce datos sobre tu proyecto:"
         read -p "Nombre del proyecto: " project_name
-        GITHUB_REPO="$project_name"
         read -p "Dueño/a del proyecto: " project_owner
-        GITHUB_OWNER="$project_owner"
+        read -p "Token de Git: " token
+
+        # ENVIROMENT VARIABLES
+        touch "$HOME/.gitple_config_$project_name"
+        config_file="$HOME/.gitple_config_$project_name"
+
+        echo "GITHUB_OWNER=$project_owner" > "$config_file"
+        echo "GITHUB_REPO=$project_name" >> "$config_file"
+        echo "GITHUB_TOKEN=$token" >> "$config_file"
+
+        source "$config_file"
+
         exit
         ;;
-      show-tags)
-        echo "Mostrando tags..."
-        show-tags
+      tag)
+        configure_env
+        case $2 in
+          -h|-\?|--help|"")
+            help-tag
+            exit
+            ;;
+          show)
+            echo "Mostrando tags..."
+            git tag --sort=-v:refname
+            exit
+            ;;
+          create)
+            if [[ "$3" == "-h" ]] || [[ "$3" == "--help" ]] || [[ "$3" == "" ]]; then
+              echo "Usage: gitple tag create [nombre del tag]"
+              echo "Descripción: crea un tag con el nombre especificado"
+              exit
+            elif [ -n "$3" ]; then
+              check-tag-create "$3"
+              if [ $existe_tag -eq 1 ]; then
+                echo -e "${RED}Ya existe un tag con el nombre: $3${RESET}"
+                exit
+              else
+                echo "Creando el tag: $3"
+                create-tag "$3"
+              fi
+            fi
+            ;;
+          delete)
+            if [[ "$3" == "-h" ]] || [[ "$3" == "--help" ]] || [[ "$3" == "" ]]; then
+              echo "Usage: gitple tag delete [nombre del tag]"
+              echo "Descripción: elimina el tag especificado"
+              exit
+            elif [ -n "$3" ]; then
+              check-tag "$3"
+              echo "Eliminando el tag: $3"
+              delete-tag "$3"
+            fi
+            ;;
+          *)
+            echo "Comando desconocido: $2" >&2
+            help-tag
+            exit "$ERROR_ARGUMENTS"
+            ;;
+        esac
         ;;
-      delete-tag)
-        if [[ "$2" == "-h" ]] || [[ "$2" == "--help" ]] || [[ "$2" == "" ]]; then
-          echo "Usage: gitple delete-tag [nombre_del_tag]"
-          echo "Descripción: elimina el tag especificado"
-          exit
-        elif [ -n "$2" ]; then
-          check-tag "$2"
-          echo "Eliminando el tag: $2"
-          delete-tag "$2"
-        fi
-        ;;
-      show-branch)
-        echo "Mostrando branches..."
-        git branch
-        exit
-        ;;
-      delete-branch)
-        if [[ "$2" == "-h" ]] || [[ "$2" == "--help" ]] || [[ "$2" == "" ]]; then
-          echo "Usage: gitple delete-branch [nombre_del_branch]"
-          echo "Descripción: elimina el branch especificado"
-          exit
-        elif [ -n "$2" ]; then
-          check-branch "$2"
-          echo "Eliminando el branch: $2"
-          delete-branch "$2"
-        fi
+      branch)
+        configure_env
+        case $2 in
+          -h|-\?|--help|"")
+            help-branch
+            exit
+            ;;
+          show)
+            echo "Mostrando branches..."
+            git branch
+            exit
+            ;;
+          create)
+            if [[ "$3" == "-h" ]] || [[ "$3" == "--help" ]] || [[ "$3" == "" ]]; then
+              echo "Usage: gitple branch create [nombre de la branch]"
+              echo "Descripción: crea una branch con el nombre especificado"
+              exit
+            elif [ -n "$3" ]; then
+              check-branch-create "$3"
+              if [ $existe_branch -eq 1 ]; then
+                echo -e "${RED}Ya existe una branch con el nombre: $3${RESET}"
+                exit
+              else
+                echo "Creando la branch: $3"
+                create-branch "$3"
+              fi
+            fi
+            exit
+            ;;
+          delete)
+            if [[ "$3" == "-h" ]] || [[ "$3" == "--help" ]] || [[ "$3" == "" ]]; then
+              echo "Usage: gitple branch delete [nombre de la branch]"
+              echo "Descripción: elimina la branch especificada"
+              exit
+            elif [ -n "$3" ]; then
+              check-branch "$3"
+              echo "Eliminando la branch: $3"
+              delete-branch "$3"
+            fi
+            exit
+            ;;
+          *)
+            echo "Comando desconocido: $2" >&2
+            help-tag
+            exit "$ERROR_ARGUMENTS"
+            ;;
+        esac
         ;;
       new-version)
+        configure_env
         semantic_release "${BASH_ARGV[@]}"
         exit
         ;;
       version)
+        configure_env
         version
         exit
         ;;
+      review)
+        configure_env
+        case $2 in
+          -h|-\?|--help)
+            help-review
+            exit
+            ;;
+          *)
+            echo -e "${GREEN}Estado de tu proyecto${RESET}\n"
+            echo -e "${BLUE}Descripción:${RESET}"
+            echo -e "Nombre del proyecto: $GITHUB_REPO"
+            echo -e "Dueño/a del proyecto: $GITHUB_OWNER \n"
+
+            echo -e "${BLUE}Archivos esenciales:${RESET}"
+            check_files
+            if [ ${#files[@]} -eq 0 ]; then
+              echo -e "Todos los archivos esenciales están presentes ${GREEN}CORRECTO${RESET}"
+            else
+              echo "Faltan los siguientes archivos esenciales:"
+              for file in "${files[@]}"; do
+                echo "- $file"
+              done
+            fi
+
+            echo -e "\n${BLUE}Dependencias:${RESET}"
+            review-dependencies
+            exit
+            ;;
+          esac
+          ;;
       -h|-\?|--help)
-        echo "$USAGE"
+        echo -e "$USAGE"
         exit
         ;;
       -?*)
         echo "Comando desconocido: $1" >&2
-        echo "$USAGE"
+        echo -e "$USAGE"
         exit "$ERROR_ARGUMENTS"
         ;;
       ?*)
         echo "Comando desconocido: $1" >&2
-        echo "$USAGE"
+        echo -e "$USAGE"
         exit "$ERROR_ARGUMENTS"
         ;;
       esac
   done
+}
+
+help-tag() {
+  echo -e "
+  ${BLUE}Usage: gitple tag [option]${RESET}
+
+  Available Commands:
+    ${GREEN}show${RESET}                         Lista tus branches
+    ${GREEN}create${RESET}                       Crea una branch
+    ${GREEN}delete${RESET}                       Elimina una branch"
+}
+
+help-branch() {
+  echo -e "
+  ${BLUE}Usage: gitple branch [option]${RESET}
+
+  Available Commands:
+    ${GREEN}show${RESET}                         Lista tus branches
+    ${GREEN}create${RESET}                       Crea una branch
+    ${GREEN}delete${RESET}                       Elimina una branch"
+}
+
+help-review () {
+  echo -e "
+  Muestra el estado de tu aplicación.
+
+  Essential files:
+    ${GREEN}README.md${RESET}                     Archivo de documentación
+    ${GREEN}CHANGELOG.md${RESET}                  Archivo de cambios de versión
+    ${GREEN}LICENSE${RESET}                       Archivo de licencia
+
+    ${BLUE}Description: Chequea si tienes 3 de los archivos más esenciales para tu proyecto.${RESET}
+
+  Available dependencies:
+    ${GREEN}requirements.txt${RESET}              Dependencias de Python
+    ${GREEN}package.json${RESET}                  Dependencias de Nodejs
+    ${GREEN}commposer.json${RESET}                Dependencias de PHP
+
+    ${BLUE}Description: Hace un chequeo para ver si tu proyecto tiene las dependencias actualizadas.${RESET}
+  
+  Security:
+    ${BLUE}Description: Revisa si todos los ficheros por si tienes algo importante sin descrifrar o que pueda comprometer a tu repositorio.${RESET}
+  
+  Permissions:
+    ${BLUE}Description: Revisa si los permisos de tus ficheros pueden comprometer a tu repositorio.${RESET}
+
+  Usage: 
+    ${BLUE}gitple review${RESET}"
 }
 
 show-tags() {
@@ -148,9 +304,30 @@ check-tag() {
   if [ $local_tag -eq 0 ] && [ $remote_tag -eq 0 ]; then
     echo "El tag proporcionado no existe: $tag"
     echo
-    echo Para listar tus tags utilice: gitple show-tags
+    echo Para listar tus tags utilice: gitple show tags
     exit
   fi
+}
+
+check-tag-create() {
+  tag=$1
+
+  local_tag=$(git tag | grep "$tag" | wc -l)
+  remote_tag=$(git ls-remote --tags origin | grep "$tag" | head -n1 | wc -l)
+
+  if [ $local_tag -eq 1 ] && [ $remote_tag -eq 1 ]; then
+    existe_tag=1
+  else
+    existe_tag=0
+  fi
+}
+
+create-tag() {
+  tag=$1
+
+  git tag -a $tag -m "Tag $tag"
+  git push origin $tag > /dev/null 2>&1
+  exit
 }
 
 delete-tag() {
@@ -169,9 +346,30 @@ check-branch() {
     if [ $local_branch -eq 0 ] && [ $remote_branch -eq 0 ]; then
         echo "El branch proporcionado no existe: $branch"
         echo
-        echo Para listar tus branches utilice: gitple show-branch
+        echo Para listar tus branches utilice: gitple branch show
         exit
     fi
+}
+
+check-branch-create() {
+    branch=$1
+
+    local_branch=$(git branch | grep "$branch" | wc -l)
+    remote_branch=$(git ls-remote --heads origin | grep "$branch" | head -n1 | wc -l)
+
+    if [ $local_branch -eq 1 ] && [ $remote_branch -eq 1 ]; then
+        existe_branch=1
+    else
+        existe_branch=0
+    fi
+}
+
+create-branch() {
+    branch=$1
+
+    git branch $branch
+    git push origin $branch > /dev/null 2>&1
+    exit
 }
 
 delete-branch() {
@@ -188,6 +386,55 @@ version() {
     echo "Para crear una nueva versión ejecute: gitple new-version"
   else
     cat info/last_version.txt
+  fi
+}
+
+check_files() {
+  files=()
+  pos=${#files[@]}
+
+  if [ ! -f "README.md" ]; then
+    files[$pos]="README.md"
+    pos=${#files[@]}
+  fi
+  if [ ! -f "CHANGELOG.md" ]; then
+    files[$pos]="CHANGELOG.md"
+    pos=${#files[@]}
+  fi
+  if [ ! -f "LICENSE" ]; then
+    files[$pos]="LICENSE"
+    pos=${#files[@]}
+  fi
+}
+
+review-dependencies() {
+  no_dependencias=0
+
+  if [ ! -f "requirements.txt" ]; then
+    no_dependencias=$((no_dependencias+1))
+  else
+    dependencia="python"
+  fi
+  if [ ! -f "package.json" ]; then
+    no_dependencias=$((no_dependencias+1))
+  else
+    dependencia="nodejs"
+  fi
+  if [ ! -f composer.json ]; then
+    no_dependencias=$((no_dependencias+1))
+  else
+    dependencia="php"
+  fi
+  if [ $no_dependencias -eq 3 ]; then
+    echo -e "Tu proyecto no necesita dependencias ${GREEN}CORRECTO${RESET}"
+  else
+    if [[ "$dependencia" == "python" ]]; then
+      python_dependencia
+    elif [[ "$dependencia" == "nodejs" ]]; then
+      nodejs_dependencia
+    elif [[ "$dependencia" == "php" ]]; then
+      php_dependencia
+    fi
   fi
 }
 
@@ -513,6 +760,20 @@ semantic_release() {
     else
       create_tag
     fi
+  fi
+}
+
+# Configuración de las variables de entorno
+configure_env() {
+  nombre=$(basename "$PWD")
+  inicio=$(find / -name ".gitple_config_$nombre" | wc -l)
+
+  if [ $inicio -eq 1 ]; then
+    source "$HOME/.gitple_config_$nombre"
+  else
+    echo -e "No se ha encontrado ningún archivo de configuración para este proyecto\n"
+    echo -e "${BLUE}Para iniciar el proyecto utilice: gitple start${RESET}"
+    exit
   fi
 }
 
