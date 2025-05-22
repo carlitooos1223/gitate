@@ -49,8 +49,6 @@ check_exposed_commits
 
 -------------------------------------------------------------------------------------------------------------
 
-#!/bin/bash
-
 gitple_undo() {
     echo "Deshaciendo el último commit..."
     git reset --soft HEAD~1
@@ -60,3 +58,6 @@ gitple_undo() {
 # Ejecutar la función si el usuario escribe `gitple undo`
 gitple_undo
 
+-------------------------------------------------------------------------------------------------------------
+
+Prompt = "Genera un mensaje de commit claro, conciso y añadiendo al principio el tipo de commit realizado, ejemplo: fix: bug fixed, basado en estos cambios:"
