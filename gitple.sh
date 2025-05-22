@@ -26,6 +26,7 @@ Usage:
 
 Available Commands:
   ${GREEN}branch [show|create|delete]${RESET}       Lista tus branches | Crea una branch | Elimina una branch
+  ${GREEN}commit${RESET}				    Realiza un commit con mensaje automático
   ${GREEN}review${RESET}                            Muestra el estado de tu aplicación
   ${GREEN}security [commit]${RESET}		    Muestra si hay alguna credencial expuesta | Muestra si hay alguna credencial en algún commit.
   ${GREEN}start${RESET}                             Empezar un nuevo proyecto
