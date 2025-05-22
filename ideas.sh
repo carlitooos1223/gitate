@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gitple_security() {
+security() {
     echo "Ejecutando análisis de seguridad en el repositorio..."
 
     # Verificar credenciales expuestas
@@ -20,7 +20,7 @@ gitple_security() {
 }
 
 # Llamada a la función si el usuario ejecuta `gitple security`
-gitple_security
+security
 
 -------------------------------------------------------------------------------------------------------------
 
@@ -49,28 +49,32 @@ check_exposed_commits
 
 -------------------------------------------------------------------------------------------------------------
 
-gitple_undo() {
+undo() {
     echo "Deshaciendo el último commit..."
     git reset --soft HEAD~1
     echo "Listo, el último commit ha sido eliminado pero los cambios siguen disponibles."
 }
 
 # Ejecutar la función si el usuario escribe `gitple undo`
-gitple_undo
+undo
 
 -------------------------------------------------------------------------------------------------------------
 
-API_KEY="MI_API_KEY"
-PROMPT="Escribe un mensaje de commit para el siguiente cambio: Se actualizó el README para quitar un enlace"
+get_ai_prompt() {
+    API_KEY="MI_API_KEY"
+    PROMPT="Escribe un mensaje de commit para el siguiente cambio: Se actualizó el README para quitar un enlace"
+    
+    RESPUESTA=$(curl -s https://api.openai.com/v1/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $API_KEY" \
+      -d '{
+        "model": "gpt-4",
+        "messages": [{"role": "user", "content": "'"$PROMPT"'"}],
+        "temperature": 0.7
+      }')
+    
+    echo "$RESPUESTA" | jq -r '.choices[0].message.content'
+}
 
-RESPUESTA=$(curl -s https://api.openai.com/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $API_KEY" \
-  -d '{
-    "model": "gpt-4",
-    "messages": [{"role": "user", "content": "'"$PROMPT"'"}],
-    "temperature": 0.7
-  }')
-
-echo "$RESPUESTA" | jq -r '.choices[0].message.content'
-
+# Ejecutar la función si el usuario escribe `gitple commit`
+get_ai_prompt
