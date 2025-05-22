@@ -27,9 +27,11 @@ Usage:
 Available Commands:
   ${GREEN}branch [show|create|delete]${RESET}       Lista tus branches | Crea una branch | Elimina una branch
   ${GREEN}review${RESET}                            Muestra el estado de tu aplicación
+  ${GREEN}security [commit]${RESET}		    Muestra si hay alguna credencial expuesta | Muestra si hay alguna credencial en algún commit.
   ${GREEN}start${RESET}                             Empezar un nuevo proyecto
   ${GREEN}tag [show|create|delete]${RESET}          Lista tus tags | Crea una tag | Elimina una tag
   ${GREEN}template [create]${RESET}                 Crea una plantilla para un nuevo proyecto
+  ${GREEN}undo${RESET}				    Restaura el último commit realizado
   ${GREEN}version [show|new]${RESET}                Te dice la última versión de tu aplicación | Crea una nueva versión y modifica el CHANGELOG automáticamente
 
 Flags:
@@ -133,7 +135,7 @@ options() {
           *)
             echo "Comando desconocido: $2" >&2
             help-tag
-            exit "$ERROR_ARGUMENTS"
+            exit "$_ARGUMENTS"
             ;;
         esac
         ;;
