@@ -60,4 +60,17 @@ gitple_undo
 
 -------------------------------------------------------------------------------------------------------------
 
-Prompt = "Genera un mensaje de commit claro, conciso y añadiendo al principio el tipo de commit realizado, ejemplo: fix: bug fixed, basado en estos cambios:"
+API_KEY="MI_API_KEY"
+PROMPT="Escribe un mensaje de commit para el siguiente cambio: Se actualizó el README para quitar un enlace"
+
+RESPUESTA=$(curl -s https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  -d '{
+    "model": "gpt-4",
+    "messages": [{"role": "user", "content": "'"$PROMPT"'"}],
+    "temperature": 0.7
+  }')
+
+echo "$RESPUESTA" | jq -r '.choices[0].message.content'
+
