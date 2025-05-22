@@ -94,6 +94,18 @@ options() {
 
         exit
         ;;
+      commit)
+        configure_env
+	case $2 in
+ 	  -h|-\?|--help)
+    	    help-commit
+	    exit
+     	    ;;
+    	  *)
+            echo "Comando desconocido: $2" >&2
+            help-commit
+            exit "$_ARGUMENTS"
+	    ;;
       tag)
         configure_env
         case $2 in
@@ -188,14 +200,28 @@ options() {
             ;;
         esac
         ;;
-      new-version)
-        configure_env
-        semantic_release "${BASH_ARGV[@]}"
-        exit
-        ;;
       version)
         configure_env
-        version
+	case $2 in
+          -h|-\?|--help)
+	    help-version
+       	    exit
+	    ;;
+       	  show)
+            version
+	    exit
+	    ;;
+     	  new)
+	    semantic_release
+     	    exit
+            ;;
+	  *)
+   	    echo "Comando desconocido: $2" >&2
+            help-version
+            exit "$ERROR_ARGUMENTS"
+            ;;
+	esac
+ 	;;
         exit
         ;;
       review)
@@ -246,6 +272,13 @@ options() {
   done
 }
 
+help-commit() {
+  echo -e "
+  Description: Genereá automáticamente un commit con los cambios realizados.
+  
+  ${BLUE}Usage: gitple commit${RESET}"
+}
+
 help-tag() {
   echo -e "
   ${BLUE}Usage: gitple tag [option]${RESET}
@@ -264,6 +297,12 @@ help-branch() {
     ${GREEN}show${RESET}                         Lista tus branches
     ${GREEN}create${RESET}                       Crea una branch
     ${GREEN}delete${RESET}                       Elimina una branch"
+}
+
+help-version() {
+  echo -e "
+  ${BLUE}Usage: gitple version [show|version]${RESET}"
+
 }
 
 help-review () {
