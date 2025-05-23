@@ -26,12 +26,12 @@ Usage:
 
 Available Commands:
   ${GREEN}branch [show|create|delete]${RESET}       Lista tus branches | Crea una branch | Elimina una branch
-  ${GREEN}commit${RESET}			    Realiza un commit con mensaje automático
+  ${GREEN}commit${RESET}			    Realiza un commit con un mensaje automático
   ${GREEN}review${RESET}                            Muestra el estado de tu aplicación
   ${GREEN}security [commit]${RESET}		    Muestra si hay alguna credencial expuesta | Muestra si hay alguna credencial en algún commit.
   ${GREEN}start${RESET}                             Empezar un nuevo proyecto
   ${GREEN}tag [show|create|delete]${RESET}          Lista tus tags | Crea una tag | Elimina una tag
-  ${GREEN}template [create]${RESET}                 Crea una plantilla para un nuevo proyecto
+  ${GREEN}template [new|show|use]${RESET}           Crea una nueva plantilla | Lista todas tus plantillas generadas | Usa la plantilla creada
   ${GREEN}undo${RESET}				    Restaura el último commit realizado
   ${GREEN}version [show|new]${RESET}                Te dice la última versión de tu aplicación | Crea una nueva versión y modifica el CHANGELOG automáticamente
 
@@ -73,39 +73,60 @@ options() {
     echo -e "$USAGE"
     exit
   fi
-   while :; do
-		case $1 in
+  while :; do
+    case $1 in
       start)
-        echo -e "${GREEN}Iniciando un nuevo proyecto...${RESET}\n"
-        echo "Introduce datos sobre tu proyecto:"
-        read -p "Nombre del proyecto: " project_name
-        read -p "Dueño/a del proyecto: " project_owner
-        read -p "Token de Git: " token
+        case $2 in
+          -h|-\?|--help)
+              help-start
+              exit
+              ;;
+          *)
+            if [ -z $2 ]; then
+              echo -e "${GREEN}Iniciando un nuevo proyecto...${RESET}\n"
+              echo "Introduce datos sobre tu proyecto:"
+              read -p "Nombre del proyecto: " project_name
+              read -p "Dueño/a del proyecto: " project_owner
+              read -p "Token de Git: " token
 
-        # ENVIROMENT VARIABLES
-        touch "$HOME/.gitple_config_$project_name"
-        config_file="$HOME/.gitple_config_$project_name"
+              # ENVIROMENT VARIABLES
+              touch "$HOME/.gitple/gitple_config_$project_name"
+              config_file="$HOME/.gitple/gitple_config_$project_name"
 
-        echo "GITHUB_OWNER=$project_owner" > "$config_file"
-        echo "GITHUB_REPO=$project_name" >> "$config_file"
-        echo "GITHUB_TOKEN=$token" >> "$config_file"
+              echo "GITHUB_OWNER=$project_owner" > "$config_file"
+              echo "GITHUB_REPO=$project_name" >> "$config_file"
+              echo "GITHUB_TOKEN=$token" >> "$config_file"
 
-        source "$config_file"
+              source "$config_file"
 
-        exit
+              exit
+            else
+              echo "Comando desconocido: $2" >&2
+              help-start
+              exit "$ERROR_ARGUMENTS"
+            fi
+            ;;
+        esac
         ;;
       commit)
         configure_env
-	case $2 in
- 	  -h|-\?|--help)
-    	    help-commit
-	    exit
-     	    ;;
-    	  *)
-            echo "Comando desconocido: $2" >&2
+        case $2 in
+          -h|-\?|--help)
             help-commit
-            exit "$_ARGUMENTS"
-	    ;;
+            exit
+            ;;
+          *)
+            if [ -z $2 ]; then
+              echo "Creando commit..."
+              exit
+            else
+              echo "Comando desconocido: $2" >&2
+              help-commit
+              exit "$ERROR_ARGUMENTS"
+            fi
+            ;;
+        esac
+        ;;
       tag)
         configure_env
         case $2 in
@@ -148,7 +169,7 @@ options() {
           *)
             echo "Comando desconocido: $2" >&2
             help-tag
-            exit "$_ARGUMENTS"
+            exit "$ERROR_ARGUMENTS"
             ;;
         esac
         ;;
@@ -200,29 +221,91 @@ options() {
             ;;
         esac
         ;;
+      template)
+        configure_env
+        case $2 in
+          -h|-?\|--help)
+            help-template
+            exit
+            ;;
+          new)
+            read -p "Nombre de la plantilla: " new_template
+            echo "Creando plantilla"
+
+            mkdir -p "$HOME/.gitple/templates/$new_template"
+            find . -mindepth 1 ! -name ".git" ! -path "./.git/*" -exec cp -r --parents {} "$HOME/.gitple/templates/$new_template/" \;
+
+            echo "Plantilla: $new_template guardada correctamente"
+            exit
+            ;;
+          show)
+            ls_template=$(ls $HOME/.gitple/templates/ | wc -l)
+
+            templates=()
+            show_templates=$(ls $HOME/.gitple/templates/)
+
+            if [ $ls_template -eq 0 ]; then
+              echo "${RED}Actualmente no tienes ninguna plantilla creada${RESET}"
+              echo -e "Para crear una nueva utilice: ${BLUE}gitple template new${RESET}"
+            else
+              for template in $show_templates; do
+                pos=${#templates[@]}
+                templates[$pos]=$template
+              done
+
+              echo "Estas son tus plantillas:"
+              echo -e ${GREEN}${templates[@]}${RESET}
+            fi
+            exit
+            ;;
+          use)
+            template=$3
+
+            if [ -z $template ]; then
+              echo -e "Debes añadir el nombre de la plantilla que quieras utilizar"
+              echo -e "Para listar tus plantillas utilice: ${BLUE}gitple template show${RESET}"
+              echo
+              echo -e "${BLUE}Usage: gitple use [nombre de la plantilla]"
+            else
+              if [ -d $HOME/.gitple/templates/$template ]; then
+                read -p "Nombre del nuevo repositorio: " new_repo
+                cp -r $HOME/.gitple/templates/$template/ ../$new_repo
+                echo -e "Se ha creado el repositorio: ${BLUE}$new_repo${RESET} con la plantilla: ${BLUE}use_template${RESET}"
+              else
+                echo "La plantilla $template no existe"
+                echo -e "Si quieres crear una nueva plantilla utilice: ${BLUE}gitple template new${RESET}"
+              fi
+            fi
+            exit
+            ;;
+          *)
+            echo "Comando desconocido: $2" >&2
+            help-template
+            exit "$ERROR_ARGUMENTS"
+            ;;
+        esac
+        ;;
       version)
         configure_env
-	case $2 in
+        case $2 in
           -h|-\?|--help)
-	    help-version
-       	    exit
-	    ;;
-       	  show)
-            version
-	    exit
-	    ;;
-     	  new)
-	    semantic_release
-     	    exit
+            help-version
+            exit
             ;;
-	  *)
-   	    echo "Comando desconocido: $2" >&2
+          show)
+            version
+            exit
+            ;;
+          new)
+            semantic_release
+            exit
+            ;;
+          *)
+            echo "Comando desconocido: $2" >&2
             help-version
             exit "$ERROR_ARGUMENTS"
             ;;
-	esac
- 	;;
-        exit
+        esac
         ;;
       review)
         configure_env
@@ -232,28 +315,34 @@ options() {
             exit
             ;;
           *)
-            echo -e "${GREEN}Estado de tu proyecto${RESET}\n"
-            echo -e "${BLUE}Descripción:${RESET}"
-            echo -e "Nombre del proyecto: $GITHUB_REPO"
-            echo -e "Dueño/a del proyecto: $GITHUB_OWNER \n"
+            if [ -z $2 ]; then
+              echo -e "${GREEN}Estado de tu proyecto${RESET}\n"
+              echo -e "${BLUE}Descripción:${RESET}"
+              echo -e "Nombre del proyecto: $GITHUB_REPO"
+              echo -e "Dueño/a del proyecto: $GITHUB_OWNER \n"
 
-            echo -e "${BLUE}Archivos esenciales:${RESET}"
-            check_files
-            if [ ${#files[@]} -eq 0 ]; then
-              echo -e "Todos los archivos esenciales están presentes ${GREEN}CORRECTO${RESET}"
+              echo -e "${BLUE}Archivos esenciales:${RESET}"
+              check_files
+              if [ ${#files[@]} -eq 0 ]; then
+                echo -e "Todos los archivos esenciales están presentes ${GREEN}CORRECTO${RESET}"
+              else
+                echo "Faltan los siguientes archivos esenciales:"
+                for file in "${files[@]}"; do
+                  echo "- $file"
+                done
+              fi
+
+              echo -e "\n${BLUE}Dependencias:${RESET}"
+              review-dependencies
+              exit
             else
-              echo "Faltan los siguientes archivos esenciales:"
-              for file in "${files[@]}"; do
-                echo "- $file"
-              done
+              echo "Comando desconocido: $1" >&2
+              help-review
+              exit "$ERROR_ARGUMENTS"
             fi
-
-            echo -e "\n${BLUE}Dependencias:${RESET}"
-            review-dependencies
-            exit
             ;;
-          esac
-          ;;
+        esac
+        ;;
       -h|-\?|--help)
         echo -e "$USAGE"
         exit
@@ -268,15 +357,45 @@ options() {
         echo -e "$USAGE"
         exit "$ERROR_ARGUMENTS"
         ;;
-      esac
+    esac
   done
+}
+
+help-start() {
+  echo -e "
+  Este comando es obligatorio para empezar a utilizar el programa.
+  Se deberá utilizar en un repositorio de git.
+
+  Pedirá 3 variables de entrono:
+    ${GREEN}GITHUB_REPO${RESET}                    Nombre de tu repositorio de Github
+    ${GREEN}GITHUB_OWNER${RESET}                   Propietario del repositorio    
+    ${GREEN}GITHUB_TOKEN${RESET}                   Token de la cuenta de Github
+
+  ${BLUE}Usage: git start${RESET}"
 }
 
 help-commit() {
   echo -e "
-  Description: Genereá automáticamente un commit con los cambios realizados.
+  Description: Generará automáticamente un commit con los cambios realizados.
   
   ${BLUE}Usage: gitple commit${RESET}"
+}
+
+help-template() {
+  echo -e "
+  Description: 
+    Creará una plantilla a partir de los directorios y ficheros de tu repositorio.
+
+    Solo crea un repositorio igual, no se establecen las variables de entorno, 
+    para utilizar el repositorio creado con la plantilla, utilice dentro: ${BLUE}gitple start${RESET}
+
+  Avaible commands:
+    ${GREEN}new${RESET}         Crea una nueva plantilla
+    ${GREEN}show${RESET}        Lista todas tus plantillas generadas
+    ${GREEN}use${RESET}         Usa la plantilla creada
+
+  ${BLUE}Usage: gitple template [new|show|use]${RESET}"
+
 }
 
 help-tag() {
@@ -811,7 +930,7 @@ configure_env() {
   inicio=$(find / -name ".gitple_config_$nombre" | wc -l)
 
   if [ $inicio -eq 1 ]; then
-    source "$HOME/.gitple_config_$nombre"
+    source "$HOME/.gitple/gitple_config_$nombre"
   else
     echo -e "No se ha encontrado ningún archivo de configuración para este proyecto\n"
     echo -e "${BLUE}Para iniciar el proyecto utilice: gitple start${RESET}"
