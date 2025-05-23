@@ -28,7 +28,6 @@ Available Commands:
   ${GREEN}branch [show|create|delete]${RESET}       Lista tus branches | Crea una branch | Elimina una branch
   ${GREEN}commit${RESET}			    Realiza un commit con un mensaje automático
   ${GREEN}review${RESET}                            Muestra el estado de tu aplicación
-  ${GREEN}security [commit]${RESET}		    Muestra si hay alguna credencial expuesta | Muestra si hay alguna credencial en algún commit.
   ${GREEN}start${RESET}                             Empezar un nuevo proyecto
   ${GREEN}tag [show|create|delete]${RESET}          Lista tus tags | Crea una tag | Elimina una tag
   ${GREEN}template [new|show|use]${RESET}           Crea una nueva plantilla | Lista todas tus plantillas generadas | Usa la plantilla creada
@@ -444,9 +443,6 @@ help-review () {
   
   Security:
     ${BLUE}Description: Revisa si todos los ficheros por si tienes algo importante sin descrifrar o que pueda comprometer a tu repositorio.${RESET}
-  
-  Permissions:
-    ${BLUE}Description: Revisa si los permisos de tus ficheros pueden comprometer a tu repositorio.${RESET}
 
   Usage: 
     ${BLUE}gitple review${RESET}"
