@@ -31,8 +31,7 @@ Available Commands:
   ${GREEN}start${RESET}                             Empezar un nuevo proyecto
   ${GREEN}tag [show|create|delete]${RESET}          Lista tus tags | Crea una tag | Elimina una tag
   ${GREEN}template [new|show|use]${RESET}           Crea una nueva plantilla | Lista todas tus plantillas generadas | Usa la plantilla creada
-  ${GREEN}undo${RESET}				    Restaura el último commit realizado
-  ${GREEN}version [show|new]${RESET}                Te dice la última versión de tu aplicación | Crea una nueva versión y modifica el CHANGELOG automáticamente
+  ${GREEN}version [show|new]${RESET}                Te dice la última versión de tu aplicación | Crea una nueva versión y modifica el CHANGELOG automáticamente según tus commits
 
 Flags:
   ${GREEN}-h, --help${RESET}                        Enseña ayuda sobre el comando.
@@ -134,7 +133,7 @@ options() {
             exit
             ;;
           show)
-            echo "Mostrando tags..."
+            echo -e "${GREEN}Mostrando tags...${RESET}"
             git tag --sort=-v:refname
             exit
             ;;
@@ -180,7 +179,7 @@ options() {
             exit
             ;;
           show)
-            echo "Mostrando branches..."
+            echo -e "${GREEN}Mostrando branches...${RESET}"
             git branch
             exit
             ;;
@@ -215,7 +214,7 @@ options() {
             ;;
           *)
             echo "Comando desconocido: $2" >&2
-            help-tag
+            help-branch
             exit "$ERROR_ARGUMENTS"
             ;;
         esac
@@ -542,6 +541,7 @@ version() {
     echo "Actualmente tu aplicación no tiene ninguna versión disponible"
     echo "Para crear una nueva versión ejecute: gitple new-version"
   else
+    echo -e "${GREEN}La versión más reciente encontrada es:${RESET}
     cat info/last_version.txt
   fi
 }
